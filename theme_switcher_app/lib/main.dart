@@ -16,6 +16,12 @@ class _RunMyAppState extends State<RunMyApp> {
   // Variable to manage the current theme mode
   ThemeMode _themeMode = ThemeMode.system;
 
+  @override
+  void initState() {
+    super.initState();
+    _loadThemeMode();
+  }
+
   // Method to toggle the theme
   void changeTheme(ThemeMode themeMode) {
     setState(() {
@@ -33,18 +39,18 @@ class _RunMyAppState extends State<RunMyApp> {
       debugShowCheckedModeBanner: false,
       title: 'Theme Demo',
 
-      // TODO: Customize these themes further if desired
       theme: ThemeData(
         primarySwatch: Colors.blueGrey,
-        scaffoldBackgroundColor: Colors.grey[200], // Light mode background
+        scaffoldBackgroundColor: Colors.white, // Light mode background
+        // TODO: Implement Material 3 Color System
         useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
         extensions: const [AppColors(success: Colors.green)],
       ),
       darkTheme: ThemeData.dark(), // Dark mode configuration
 
       themeMode: _themeMode, // Connects the state to the app
-
+      //TODO: Implement AnimatedTheme
       home: /*AnimatedTheme(
         data: Theme.of(context),
         duration: const Duration(milliseconds: 500),
@@ -62,10 +68,9 @@ class _RunMyAppState extends State<RunMyApp> {
                 margin: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
                   // Use a ternary operator to check theme brightness
-                  color: Theme.of(context).brightness == Brightness.dark
-                      ? Colors.white
-                      : Colors.grey,
+                  color: isDark ? Colors.white : Colors.grey,
                   borderRadius: BorderRadius.circular(20),
+                  // shape: BoxShape.circle,
                 ),
                 alignment: Alignment.center,
                 child: const Text(
@@ -84,34 +89,36 @@ class _RunMyAppState extends State<RunMyApp> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  // Swaps between Moon and Sun Icon
                   Icon(isDark ? Icons.nightlight_round : Icons.wb_sunny),
+
                   const SizedBox(width: 10),
+
+                  // Switch for Light vs Dark Mode
                   Switch(
                     value: isDark,
                     onChanged: (bool isDark) {
-                      setState(() {
-                        _themeMode = isDark ? ThemeMode.dark : ThemeMode.light;
-                      });
+                      changeTheme(isDark ? ThemeMode.dark : ThemeMode.light);
                     },
                   ),
                 ],
               ),
-              /*
-              // PART 1 TASK: Controls
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  ElevatedButton(
-                    onPressed: () => changeTheme(ThemeMode.light),
-                    child: const Text('Light Theme'),
-                  ),
-                  ElevatedButton(
-                    onPressed: () => changeTheme(ThemeMode.dark),
-                    child: const Text('Dark Theme'),
-                  ),
-                ],
-              ),
-              */
+
+              // // Two Button Controls
+              // // PART 1 TASK: Controls
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              //   children: [
+              //     ElevatedButton(
+              //       onPressed: () => changeTheme(ThemeMode.light),
+              //       child: const Text('Light Theme'),
+              //     ),
+              //     ElevatedButton(
+              //       onPressed: () => changeTheme(ThemeMode.dark),
+              //       child: const Text('Dark Theme'),
+              //     ),
+              //   ],
+              // ),
             ],
           ),
         ),
@@ -134,6 +141,7 @@ class _RunMyAppState extends State<RunMyApp> {
   }
 }
 
+//TODO: Implement Theme Extension
 class AppColors extends ThemeExtension<AppColors> {
   final Color success;
   const AppColors({required this.success});
